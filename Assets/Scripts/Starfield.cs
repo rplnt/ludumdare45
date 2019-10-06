@@ -11,10 +11,6 @@ public class Starfield : MonoBehaviour {
     Transform L2;
     Transform L3;
 
-    GameObject[] starsL1;
-    GameObject[] starsL2;
-    GameObject[] starsL3;
-
     public float boundsSize;
     public float bigSmallRatio;
     public int initialSpawnPerLayer;
@@ -24,32 +20,25 @@ public class Starfield : MonoBehaviour {
 
 
         L1 = transform.Find("L1");
-        SpawnStars(L1, starsL1, initialSpawnPerLayer);
+        SpawnStars(L1, initialSpawnPerLayer);
 
         L2 = transform.Find("L2");
-        SpawnStars(L2, starsL2, initialSpawnPerLayer * 4);
+        SpawnStars(L2, initialSpawnPerLayer * 5);
 
         L3 = transform.Find("L3");
-        SpawnStars(L3, starsL3, initialSpawnPerLayer * 8);
+        SpawnStars(L3, initialSpawnPerLayer * 10);
     }
 
-    void SpawnStars(Transform layer, GameObject[] container, int count) {
+    void SpawnStars(Transform layer, int count) {
         Bounds bounds = new Bounds(player.transform.position, new Vector3(boundsSize * Camera.main.aspect, boundsSize));
 
         for (int i=0; i < count; i++) {
             GameObject spawn = Random.Range(0.0f, 1.0f) < bigSmallRatio ? big : small;
-            Instantiate(spawn, GetPositionWithinBounds(bounds), Quaternion.identity, layer);
+            Instantiate(spawn, Consts.GetPositionWithinBounds(bounds), Quaternion.identity, layer);
         }
     }
 
-    Vector3 GetPositionWithinBounds(Bounds bounds) {
-        float x = Random.Range(bounds.min.x, bounds.max.x);
-        float y = Random.Range(bounds.min.y, bounds.max.y);
-
-        return new Vector3(x, y);
-    }
-
     public void Respawn(GameObject original, Bounds bounds) {
-        original.transform.position = GetPositionWithinBounds(bounds);
+        original.transform.position = Consts.GetPositionWithinBounds(bounds);
     }
 }
